@@ -5,7 +5,16 @@ sessions through the UC Davis Data Science Initative. The activity for
 each week is aimed at addressing certain aspects of this project, with
 the project having been separated into pieces that can be taken up one
 at a time, with little or no knowledge of the previous steps needed to
-contribute.
+contribute. However, it also provides an opportunity to participate in
+project management and using different tools in the workflow of a
+project.
+
+This is a good opportunity to get hands-on experience with different 
+concepts, skills and tools in the data pipeline and to potentially 
+develop elements of your data science portfolio.
+
+We'll work as a group (and subgroups), so you will be able to learn from others rather
+than needing to know how to do everything yourself.
 
 ###Background
 
@@ -21,7 +30,7 @@ yields using historical data derived from multiple sources.
 ###Outline
 
   + Organizing a new project.
-	- Skills: Containerization, project templates, git
+	- Skills: Project templates, git, task management, Containerization
 	
   + Recovering data from online databases (USDA, CIMIS, NOAA).
 	- Skills: Webscraping, working with APIs
