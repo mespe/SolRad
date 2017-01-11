@@ -67,5 +67,5 @@ The wiki for this project is located at the
 ###Want to contribute?
 
 Please do! We welcome anyone interested in a single aspect above, or
-for the full project. Please contact [Matt Espe](mespe@ucdavis.edu) for
+for the full project. Please contact Matt Espe (mespe@ucdavis.edu) for
 details on how to get involved.
