@@ -47,7 +47,7 @@ yields using historical data derived from multiple sources.
 	- Skills: Plotting, group-by, data munging
 	
   + Model building.
-	- Skills: Mixed modeles with lmer/[Stan](www.mc-stan.org), model checking.
+	- Skills: Mixed modeles with lmer/[Stan](http://mc-stan.org), model checking.
 	
   + Validation.
 	- Skills: Cross-validation, prediction, goodness of fit
