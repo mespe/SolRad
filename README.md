@@ -33,10 +33,10 @@ yields using historical data derived from multiple sources.
   + Organizing a new project.
 	- Skills: Project templates, git, task management, Containerization
 	
-  + Recovering data from online databases (USDA, CIMIS, NOAA).
+  + Recovering data from online databases ([USDA](https://www.nass.usda.gov/), [CIMIS](http://www.cimis.water.ca.gov/), [NOAA](https://www.ncdc.noaa.gov/data-access)).
 	- Skills: Web-scraping, working with APIs
   
-  + Working with a data dump from the California Air Resource Board.
+  + Working with a data dump from the [California Air Resource Board](https://www.arb.ca.gov/html/ds.htm).
 	- Skills: Data investigation, how do you work with data when the
       structure is unknown?
 	  
@@ -47,7 +47,7 @@ yields using historical data derived from multiple sources.
 	- Skills: Plotting, group-by, data munging
 	
   + Model building.
-	- Skills: lmer, Stan, model checking.
+	- Skills: Mixed modeles with lmer/[Stan](mc-stan.org), model checking.
 	
   + Validation.
 	- Skills: Cross-validation, prediction, goodness of fit
