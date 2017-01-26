@@ -30,6 +30,16 @@ Data
 	  - 4 stations in rice area, Davis, Colusa, Durham, and
 		Nicolaus/Verona. 
 	  - Colusa is likely the most representative.
+	  
+Other:
+
+We did not explicitly talk about this during the meeting, but it is
+really important that we look for existing functions to gather this
+data if possible.
+
+If there is an existing package out there, please use it rather than
+writing your own code.
+
 		
 
 17 Jan 2017
