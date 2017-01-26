@@ -1,5 +1,36 @@
 ##TO DO (Task) list:
 
+
+26 Jan 2017
+---------
+
+Short Term:
+
+	- Get crop data from USDA API
+	  - There is existing code on github that might need to be modified to work.
+	  - Focus on CA rice, from 1992 - 2016
+
+	- Investigate DVD data
+	  - Read the README file to see what is available
+	  - Flag the most promising parameters
+	  - (Data available on Duncan's server - see slack channel for link)
+
+	- Pull solar radiation/weather data from CIMIS API
+	  - Pull just a single station at first (Colusa)
+	  -
+
+Long Term:
+
+	 - Explore above data (once collected) look for missing data, patterns, possible new areas of exploration.
+	 - Conduct quality checks on the data.
+	 - Code review. Make sure code from above steps is
+	   1. Clear
+	   2. Consistent
+	   3. Robust
+
+
+
+
 17 Jan, 2017
 ----------
 
