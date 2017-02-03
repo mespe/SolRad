@@ -1,5 +1,63 @@
 ##Running report
 
+2 Feb 2017
+------
+
+Updates from last week:
+
+	- Sims's package created: Please code review, test, etc.
+	- Code written for USDA: 
+	- Some web-scrapping done to recover CARB data for 2015--2016
+	
+CIMIS Data:
+	- Only a few relevant vars: Solar rad., temp
+	- Downloaded by hand (Durham)  
+	- Get ETO - available energy: Check if it correlates with yield
+	
+CFSR data:
+	- reanalysis data: between modeled and observed
+	- 6 hour intervals back to 1980's-2010
+	- Downloaded in 5d intervals: ftp, download script - bounding box,
+      data range, they return script to query data
+	- Includes: solar radiation, modeled data
+	- LuM look into this further.
+	
+USDA: Check if existing package works
+
+CARB data:
+	- well structured, each file has 5yr intervals
+	- each file has ~7mil rows, per hour per day for all sites
+	- Files gives station info, gives city name, no lat/long
+	- Will need to merge 
+	
+For Next week:
+	- Pull USDA data:
+	- Check CFSR
+	- Pull CIMIS data
+	  -compare variables against yield from USDA
+	- CARB data
+	  - Which pollutants important
+	  - What stations are relevant
+	  - Quick search for relationship to sol rad, crop yield
+		- 
+		
+	- Mapping data between levels: 
+	  - Yield at county, 
+	- 
+	
+	- For now:
+	  - Get small data set: One Station (Colusa), USDA state-level
+        yields, 1992--2015
+	  - In parallel, think about
+		- Combining data from different sources, scales
+		- reconstructing crop stages/timing
+		- Mapping daily/hourly data to season
+	  - Check for missing data
+	  
+- USDA 
+	
+
+
 26 Jan 2017
 ------
 
