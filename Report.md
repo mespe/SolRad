@@ -5,7 +5,7 @@
 
 Updates from last week:
 
-	- Sims's package created: Please code review, test, etc.
+	- Rcimis package created: Please code review, test, etc.
 	- Code written for USDA: 
 	- Some web-scrapping done to recover CARB data for 2015--2016
 	

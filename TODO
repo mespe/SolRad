@@ -1,5 +1,18 @@
 ##TO DO (Task) list:
 
+2 Feb 2017
+---------
+
+Short Term:
+	  - Code review on Rcimis package: Test package, review code, add documentation where need. If you find a major issue, create bug report on the github page.
+	  - Review existing work, fill in documentation, ask questions for parts that are not clear.
+	  - Start simple: Get solar radiation data for a single weather station (Colusa), state average yields, and air quality data for the Sacramento Valley Air basin. Start to investigate the data.
+
+Long Term:
+	 - Figure out how to reconstruct the season timing data
+	 - Think about how to combine data from multiple levels - how do we map daily data from a single point to a single yield number for a county.
+
+
 
 26 Jan 2017
 ---------
