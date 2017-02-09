@@ -25,7 +25,7 @@ insertRow <- function(df,new.row,r){
   #   df: the dataframe you want to add a row to.
   #   new.row: a dataframe that is the new row you want to add.
   #   r: the index at which you would like to add your new row. There
-  #      is an assumption here 1 < r < #rows in df
+  #      is an assumption here r <= #rows+1 in df
   #
   # Returns:
   #   A datframe which is equal to df with new.row inserted
