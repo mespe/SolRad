@@ -13,38 +13,10 @@
 ### number, the percentage of crop emerged, the percentage of crop harvested, and the percentage
 ### of the crop currently growing.
 
-api.key.path <- '/Users/HK/Professional/solarradiation/HKChanges/usda-api-key' #File where you store your api key
+api.key.path <-  #File where you store your api key
 usda.api.key <- readLines(api.key.path)
 
-years <- 1990:2015 #Choose interval of years that you are interested in
-
-insertFirstRow <- function(df, new.row) {
-  # Inserts a new first row to a dataframe.
-  #
-  # Args:
-  #   df: the dataframe you want to add a row to.
-  #   new.row: a dataframe that is the new row you want to add.
-  #
-  # Returns:
-  #   A datframe with new.row as the first row and the subsequent
-  #   rows equal to df.
-  df <- rbind(new.row,df)
-  df
-}
-
-insertLastRow <- function(df, new.row) {
-  # Inserts a new last row to a dataframe.
-  #
-  # Args:
-  #   df: the dataframe you want to add a row to.
-  #   new.row: a dataframe that is the new row you want to add.
-  #
-  # Returns:
-  #   A datframe with new.row as the last row and the previous
-  #   rows equal to df.
-  df <- rbind(df,new.row)
-  df
-}
+years <- 1992:2015 #Choose interval of years that you are interested in
 
 insertRow <- function(df,new.row,r){
   # Inserts a new first row to a dataframe.
@@ -58,7 +30,13 @@ insertRow <- function(df,new.row,r){
   # Returns:
   #   A datframe which is equal to df with new.row inserted
   #   at index r.
-  df <- rbind(df[1:r-1,],new.row,df[r:nrow(df),])
+  if (r == nrow(df)+1){
+    df <- rbind(df,new.row)
+  } else if (r == 1){
+    df <- rbind(new.row,df)
+  } else {
+    df <- rbind(df[1:r-1,],new.row,df[r:nrow(df),])
+  }
   df
 }
 
@@ -82,14 +60,14 @@ fillMissingWeeks <- function(df) {
   while (first.week > 1){
     # Iterate from first week we have data from to week 1, adding missing rows with
     # crop value 0 (no crop emerged/harvested yet)
-    df <- insertFirstRow(df,new.first.row)
+    df <- insertRow(df,new.first.row,1)
     first.week <- first.week-1
     new.first.row <- data.frame(WEEK = first.week-1,Value = 0,YEAR = df[[3]][1])
   }
   while (last.week < 52){
     # Iterate from last week we have data from to week 52, adding missing rows with
     # crop value 100 (all crop emerged/harvested already)
-    df <- insertLastRow(df,new.last.row)
+    df <- insertRow(df,new.last.row,nrow(df)+1)
     last.week <- last.week + 1
     new.last.row <- data.frame(WEEK = last.week+1,Value = 100,YEAR = df[[3]][1])
   }
@@ -131,6 +109,25 @@ remove.rows <- function(df,columns.keep){
   df
 }
 
+combine.harvest.emerged <- function(years,rice.emerged,rice.harvested) {
+  weekly.rice.growing <- list()
+  for (i in years){
+    # Loop through all years requested and for each, re-index rows and add missing weeks.
+    temp <- data.frame(WEEK=subset(rice.emerged, year == i)['WEEK'],
+                       VALUE=subset(rice.emerged, year == i)['Value'],YEAR = i)
+    temp2 <- data.frame(WEEK=subset(rice.harvested, year == i)['WEEK'],
+                        VALUE=subset(rice.harvested, year == i)['Value'],YEAR = i)
+    rownames(temp) <- NULL
+    rownames(temp2) <- NULL
+    temp <- fillMissingWeeks(temp)
+    temp2 <- fillMissingWeeks(temp2)
+    temp['HARVESTED_PCT'] <- temp2['Value']/100
+    temp['EMERGED_PCT'] <- temp['Value']/100
+    weekly.rice.growing <- rbind(weekly.rice.growing,temp)
+  }
+  weekly.rice.growing
+}
+
 get.USDA.data <- function(usda.api.key, feature, commodity=c("RICE"), year=years, state="CALIFORNIA", agg_level="STATE",...){
     require(RCurl)
     require(jsonlite)
@@ -163,21 +160,7 @@ columns.keep <- c('year','commodity_desc','unit_desc','reference_period_desc','V
 rice.emerged <- remove.rows(rice.emerged,columns.keep)
 rice.harvested <- remove.rows(rice.harvested,columns.keep)
 
-weekly.rice.growing <- list()
-for (i in years){
-  # Loop through all years requested and for each, re-index rows and add missing weeks.
-  temp <- data.frame(WEEK=subset(rice.emerged, year == i)['WEEK'],
-                     VALUE=subset(rice.emerged, year == i)['Value'],YEAR = i)
-  temp2 <- data.frame(WEEK=subset(rice.harvested, year == i)['WEEK'],
-                     VALUE=subset(rice.harvested, year == i)['Value'],YEAR = i)
-  rownames(temp) <- NULL
-  rownames(temp2) <- NULL
-  temp <- fillMissingWeeks(temp)
-  temp2 <- fillMissingWeeks(temp2)
-  temp['HARVESTED_PCT'] <- temp2['Value']/100
-  temp['EMERGED_PCT'] <- temp['Value']/100
-  weekly.rice.growing <- rbind(weekly.rice.growing,temp)
-}
+weekly.rice.growing <- combine.harvest.emerged(years,rice.emerged,rice.harvested)
 
 # Reorganize some of the rows
 weekly.rice.growing <- weekly.rice.growing[c('YEAR','WEEK','EMERGED_PCT','HARVESTED_PCT')]
