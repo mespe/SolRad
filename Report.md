@@ -1,5 +1,39 @@
 ##Running report
 
+9 Feb 2017
+-----
+
+Updates on CFSR:
+	- Includes more variables:
+	  - CIMIS does not include reflected solar radiation from clouds, soil,
+        etc.
+	  - Covers 1979 -- 2010: Grid system reanalysis of historical data.
+	  - Only includes solar radiation.
+	  - Includes total clear sky downward flux
+		- reflection might be important with pollution - can directly
+          compare with air pollution values
+	  - 
+	  
+Current status:
+	- USDA: returns all character vectors, need to munge data into
+      useable form
+	- CARB: 
+		 - 6 sites originally, dropping NAs left only 3 sites, 
+		 - also looked at CH4, 
+		 - SO2, H2S have no data for colusa county
+		 - Currently have 1980-2014 daily average for ozone.
+		 - Need to save meta data for future reference
+	- How do we go from daily/hourly to seasonal?
+		- Do we weight only daylight hours?
+		- take average, median, etc.
+		- which pollutants will be handled which way.
+		  - solar-radiation: sum over day/week/season
+		  - ozone: daily average vs. max? Look into this more
+		  - PM2.5/10: look at average for daylight hours and daily
+		  - NOx, SO2, H2S?
+		  
+	  
+
 2 Feb 2017
 ------
 

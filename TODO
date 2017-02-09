@@ -1,5 +1,26 @@
 ##TO DO (Task) list:
 
+9 Feb 2017
+---------
+
+Cleaning and exploring:
+
+- Get the USDA into useful format: Converting char to numeric, cleaning, possibly dropping extra cols. (Henry, possibly Melissa)
+- Alter script to clean CIMIS data: (Luman)
+
+- get CARB metadata in secondary table. (Zamir, Gulzina, XingYi)
+
+CFSR:
+- Get a comparison to observed data (Luman)
+- compare to air pollution, see if there is a relationship (Luman)
+
+CARB:
+- Target pollutants: PM2.5/PM10, Ozone, NOx, SO2, H2S (Zamir, Gulzina, XingYi)
+  -Ozone completed
+  
+
+
+
 2 Feb 2017
 ---------
 
