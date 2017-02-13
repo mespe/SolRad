@@ -137,7 +137,7 @@ get.USDA.data <- function(usda.api.key, feature, commodity=c("RICE"), year=years
         
     fromJSON(getForm(
     		  get_data_url,
-    		  key = usda_api_key,
+    		  key = usda.api.key,
     		  source_desc = 'SURVEY',
     		  sector_desc = 'CROPS',
     		  group_desc = 'FIELD CROPS',
