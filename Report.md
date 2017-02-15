@@ -1,5 +1,26 @@
 ##Running report
 
+15 Feb 2017
+-----
+PM25 and PM10 files (Air quality)
+
+We went through PM25 and PM10 files and found the following results.
+
+PM25:
+
+- They have (every 6 day) data starting from 1998 to 2014
+- They have hourly data starting from 2012 to 2014
+- They have data only for one Site in Colusa County
+
+PM10:
+
+- They have (every 6 day) data starting from 1998 to 2014 only one Colusa Site
+- They have hourly data starting from 2013 to 2014 (NO data for Colusa Sites)
+
+Although in the “Location.xlsx” file Colusa has 6 Sites, only 3 of them collected data. 
+The rest did not have any ozone, pm25, or pm10 data.
+
+
 9 Feb 2017
 -----
 
