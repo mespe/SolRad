@@ -11,4 +11,5 @@ PM10:
 - They have (every 6 day) data starting from 1998 to 2014 only one Colusa Site
 - They have hourly data starting from 2013 to 2014 (NO data for Colusa Sites)
 
-Although in the “Location.xlsx” file Colusa has 6 Sites, only 3 of them collected data. The rest did not have any ozone, pm25, or pm10 data.
+Although in the “Location.xlsx” file Colusa has 6 Sites, only 3 of them collected data. 
+The rest did not have any ozone, pm25, or pm10 data.
