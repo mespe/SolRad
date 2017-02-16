@@ -1,5 +1,19 @@
 ##TO DO (Task) list:
 
+15 Feb
+--------
+
+- Need meta-data for each of the datasets: Currently this is in many different places, and it is easy to become confused about where data are coming from.
+
+- Coverage for air quality: spatial and temporial. We need to figure out if there is enough data here to answer our question. If not, we need a different source of info. Look at: How many stations are there in the Sacramento Valley? How many of them have records? How often are data recorded?
+
+- CFSR: Need to better understand why and how this is differing with on the ground measurements. Is it off by a constant scale, or does it vary over time. Does adding additional variables help with predictions? Is it worth losing 2010-present?
+
+- Need to get yield and CIMIS data on same scale (spatial and temporal) so we can begin to compare them.
+
+- Cleaning and error checking in on-going
+
+
 9 Feb 2017
 ---------
 

@@ -2,6 +2,36 @@
 
 15 Feb 2017
 -----
+
+We can break the project into two pieces/questions:
+
+1. Is there a relationship between yield and solar radiation?
+2. If #1, what is driving variability in solar radiation? Is
+   variability natural or human driven?
+   
+   
+Current status:
+
+CARB data needs attention - What is the coverage? Do we have enough
+data to address our questions. There is only data starting 1998, many
+stations do not actually record data. Of the stations that do, only
+report every 6 d. 
+
+CFSR data - some questions: Why are there differences between CIMIS
+and CFSR? Is it OK to use this data even though it only goes
+to 2010. Do we gain additional useful info from separating the
+different bands. 
+
+Backup plan: Possibily use airport visibility as a proxy. 
+
+How do we deal with missing data - differs by variable. Need to
+record. Gap-filling vs dropping. Needs to be robust to different
+methods. 
+
+
+
+
+
 PM25 and PM10 files (Air quality)
 
 We went through PM25 and PM10 files and found the following results.
