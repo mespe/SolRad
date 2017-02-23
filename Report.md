@@ -1,5 +1,37 @@
 ##Running report
 
+23 Feb 2017
+-----
+
+Inspected the CARB data:
+
+ - There are far more missing days for the data between
+   1999-2006. After 2006, the missing days is much reduced. However,
+   the two periods seem to be similar (see exploration/CARB.R).
+	  - We will test this, and if the missingness does not have a large
+      impact on the results of the data, we will move forward with
+      using these data. This restricts our period of analysis for air
+      quality -> solar radiation to 1999-2016.
+ 
+ - We are planning to meet next week to so some permutation tests on
+   the missingness in the CARB data - We will use the more complete
+   data to estimate the impact of missing data. Look for email from
+   Matt setting this up for next week (Feb 28-ish)
+   
+CIMIS/USDA data:
+
+ - We are going to push forward on collecting solar radiation and
+   yield data together so we can start plotting/analysis. 
+   - use solar radiation data from Colusa CIMIS station as a proxy for
+     the whole rice area (it is approx. central).
+   - use state average yield data
+   
+ - We will keep open the option to use finer scale data (county level estimates), but for now
+   will start looking at the big picture/simple.
+ - For now use the average date of emergence, harvest for analysis.
+   
+
+
 15 Feb 2017
 -----
 
