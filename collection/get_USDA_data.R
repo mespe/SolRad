@@ -29,4 +29,4 @@ get_USDA_data <- function(api_key, commodity=c("RICE"), year=1953:2017, state="C
                      ...))[[1]]
 }
 
-rice_yield<-get_USDA_data(api_key)
+##rice_yield<-get_USDA_data(api_key)

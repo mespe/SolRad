@@ -1,10 +1,10 @@
-
 source("getTimingFuns.R")
+source("get_USDA_data.R")
 
 ############################################################################
 # Some variables for the user to set:
 
-api.key.path <- #File where you store your api key
+api.key.path <- "~/Dropbox/usda_api_key.txt"#File where you store your api key
 usda.api.key <- readLines(api.key.path)
 years <- 1992:2015  #Interval of years that you are interested in
 #These are the columns from the crop yield data that will be kept
@@ -16,13 +16,20 @@ columns.keep.timing <- c('year','commodity_desc','unit_desc','reference_period_d
 # Main script
 
 # Get yield data from USDA. User can add additional parameters to call.
-rice.yield<-get.USDA.yield.data(api.key = usda.api.key, year = years,county_name="COLUSA")
+# Use same fuction for all API calls
+rice.yield<-get_USDA_data(api_key = usda.api.key, year = years, agg_level = "STATE")
 # Clean dataframe to usable format.
-rice.yield<-clean.crop.yield(rice.yield, columns.keep)
+##rice.yield<-clean.crop.yield(rice.yield, columns.keep)
 
 # Get crop timing data from USDA. 
-rice.emerged<-get.USDA.crop.timing(usda.api.key,feature = 'RICE - PROGRESS, MEASURED IN PCT EMERGED')
-rice.harvested<-get.USDA.crop.timing(usda.api.key, feature = 'RICE - PROGRESS, MEASURED IN PCT HARVESTED')
+rice.emerged<-get_USDA_data(api_key = usda.api.key, statisticcat_desc = "PROGRESS",
+                            agg_level = "STATE", year = years,
+                            short_desc = 'RICE - PROGRESS, MEASURED IN PCT EMERGED')
+
+
+rice.harvested<-get_USDA_data(api_key = usda.api.key, statisticcat_desc = "PROGRESS",
+                            agg_level = "STATE", year = years,
+                            short_desc = 'RICE - PROGRESS, MEASURED IN PCT HARVESTED')
 
 # Clean crop timing data
 columns.keep.timing <- c('year','commodity_desc','unit_desc','reference_period_desc','Value')
@@ -33,4 +40,12 @@ rice.harvested <- remove.rows.timing(rice.harvested,columns.keep.timing)
 weekly.crop.timing <- combine.harvest.emerged(years,rice.emerged,rice.harvested)
 
 # Add timing data to dataframe with yield data
-rice.yield <- add.yield.data(rice.yield,weekly.crop.timing)
+# not sure this is what we want to be doing
+# rice.yield <- add.yield.data(rice.yield,weekly.crop.timing)
+
+# need to collapse this down to a single obs per year
+weekly.split <- split(weekly.crop.timing, weekly.crop.timing$YEAR)
+
+weekly.tmp <- do.call(rbind, lapply(weekly.split, getAvgDates))
+
+rice.yield <- merge(rice.yield, weekly.tmp)

@@ -19,33 +19,34 @@
 ###############################################################################
 # Functions
 
-get.USDA.yield.data <- function(api.key, year=years, commodity=c("RICE"), state="CALIFORNIA", statisticcat_desc = "YIELD", agg_level="COUNTY",...){
-  # Gets crop yield data from USDA API.
-  #
-  # Args:
-  #   api_key: the API key you use for the USDA website.
-  #   new.row: a dataframe that is the new row you want to add.
-  #
-  # Returns:
-  #   A datframe with new.row as the first row and the subsequent
-  #   rows equal to df.
-  require(RCurl)
-  require(jsonlite)
+# Duplicates get_USDA_data
+# get.USDA.yield.data <- function(api.key, year=years, commodity=c("RICE"), state="CALIFORNIA", statisticcat_desc = "YIELD", agg_level="COUNTY",...){
+#   # Gets crop yield data from USDA API.
+#   #
+#   # Args:
+#   #   api_key: the API key you use for the USDA website.
+#   #   new.row: a dataframe that is the new row you want to add.
+#   #
+#   # Returns:
+#   #   A datframe with new.row as the first row and the subsequent
+#   #   rows equal to df.
+#   require(RCurl)
+#   require(jsonlite)
   
-  #API url
-  get.data.url <-
-    'https://quickstats.nass.usda.gov/api/api_GET/' 
+#   #API url
+#   get.data.url <-
+#     'https://quickstats.nass.usda.gov/api/api_GET/' 
   
-  fromJSON(getForm(
-    get.data.url, 
-    key = api.key,
-    commodity_desc = commodity, 
-    year = year, ##can be a range
-    state_name = state, ##default set to CALIFORNIA for our questions here
-    statisticcat_desc = statisticcat_desc, ##set default to YIELD statistics
-    agg_level_desc=agg_level, ##used county as default, can also use 
-    ...))[[1]]
-}
+#   fromJSON(getForm(
+#     get.data.url, 
+#     key = api.key,
+#     commodity_desc = commodity, 
+#     year = year, ##can be a range
+#     state_name = state, ##default set to CALIFORNIA for our questions here
+#     statisticcat_desc = statisticcat_desc, ##set default to YIELD statistics
+#     agg_level_desc=agg_level, ##used county as default, can also use 
+#     ...))[[1]]
+# }
 
 clean.crop.yield <- function(df,col.names){
   # Put crop yield data in a form we can use, this includes
@@ -186,31 +187,30 @@ combine.harvest.emerged <- function(years,rice.emerged,rice.harvested) {
 
 
 ## This appears to be duplicate code from above
-## I might combine them
 
-get.USDA.crop.timing <- function(usda.api.key, feature, commodity=c("RICE"), year=years, state="CALIFORNIA", agg_level="STATE",...){
-  require(RCurl)
-  require(jsonlite)
+# get.USDA.crop.timing <- function(usda.api.key, feature, commodity=c("RICE"), year=years, state="CALIFORNIA", agg_level="STATE",...){
+#   require(RCurl)
+#   require(jsonlite)
   
-  get.data.url <-
-    'https://quickstats.nass.usda.gov/api/api_GET/' ##fixed URL, seems NASS switched from http to https
+#   get.data.url <-
+#     'https://quickstats.nass.usda.gov/api/api_GET/' ##fixed URL, seems NASS switched from http to https
   
-  fromJSON(getForm(
-    get.data.url,
-    key = usda.api.key,
-    source_desc = 'SURVEY',
-    sector_desc = 'CROPS',
-    group_desc = 'FIELD CROPS',
-    commodity_desc = commodity, 
-    statisticcat_desc = 'PROGRESS',
-    short_desc = feature,
-    year = year, ##can be a range
-    freq_desc = 'WEEKLY',
-    agg_level_desc=agg_level, ##used county as default, can also use 
-    state_name = state, ##default set to CALIFORNIA for our questions here
-    #statisticcat_desc = statisticcat_desc, ##set default to YIELD statistics
-    ...))[[1]]
-}
+#   fromJSON(getForm(
+#     get.data.url,
+#     key = usda.api.key,
+#     source_desc = 'SURVEY',
+#     sector_desc = 'CROPS',
+#     group_desc = 'FIELD CROPS',
+#     commodity_desc = commodity, 
+#     statisticcat_desc = 'PROGRESS',
+#     short_desc = feature,
+#     year = year, ##can be a range
+#     freq_desc = 'WEEKLY',
+#     agg_level_desc=agg_level, ##used county as default, can also use 
+#     state_name = state, ##default set to CALIFORNIA for our questions here
+#     #statisticcat_desc = statisticcat_desc, ##set default to YIELD statistics
+#     ...))[[1]]
+# }
 
 add.yield.data <- function(rice.yield,weekly.crop.timing){
   # Add yield data to timing dataframe.
