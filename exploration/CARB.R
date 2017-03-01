@@ -7,13 +7,13 @@ library(readxl)
 library(RColorBrewer)
 library(maps)
 library(lattice)
+library(raster)
+library(rgdal)
 
 ############# Prep raster of rice area ########
 # The raster file from the USDA is very large - I reduce it in size here
 # and then save it as a small .Rda file that is more easily shared
 
-# library(raster)
-# library(rgdal)
 
 # usda_rice <- raster("~/Dropbox/D--CDL-NASS_DATA_CACHE-extract_3_CDL_2015_stat_clip_20161101201010_1475574269.tif")
 # usda_rice <- aggregate(usda_rice, fact = 100)
@@ -23,7 +23,7 @@ library(lattice)
 # usda_rice[usda_rice < 0.01] <- NA
 # usda_rice <- trim(usda_rice)
 # save(usda_rice, file = "rice_raster.Rda")
-
+load("rice_raster.Rda")
 ###################################
 
 data_dir <- "~/Downloads/"
@@ -69,7 +69,7 @@ text(y = avgPM$Latitude[i], avgPM$Longitude[i], labels = avgPM$Site[i], pos = 4)
 map.text("county", add = TRUE)
 map.axes()
 
-# Many of those 13 are in Sacramento (not ideal) or
+   # Many of those 13 are in Sacramento (not ideal) or
 # north of the rice area
 # We do not have great spatial coverage here
 # But it is about equal to that of the CIMIS solar radiation obs.
@@ -110,7 +110,7 @@ plot(sacPM$Date[growing], sacPM$Value[growing], pch = 16, col = rgb(0,0,0,.25))
 rug(missing[missing_grow], col = "red")
 
 # How many missing in each year during the season?
-table(missing_grow, format(missing, "%Y"))
+plot(table(missing_grow, format(missing, "%Y")))
 
 # Many overlappying observations - good for error checking, etc.
 table(growing, format(sacPM$Date, "%Y"))
@@ -123,3 +123,5 @@ i <- order(sacPM$Date)
 table(sacPM$Site, format(sacPM$Date, "%Y"))
 
 xyplot(Value ~ Date, groups =  Site, data =sacPM[i,], type = "l")
+
+write.csv(sacPM, "sac_PM25.csv", row.names = FALSE)
