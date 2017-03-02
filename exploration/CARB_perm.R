@@ -13,6 +13,8 @@ plot(diff(as.numeric(format(sacPM$Date[early], "%j"))) ~ as.numeric(format(sacPM
 
 early.split <- split(sacPM[early,], paste(format(sacPM$Date[early], "%Y"), sacPM$Site[early]))
 
+late.split <- split(sacPM[!early,], paste(format(sacPM$Date[!early], "%Y"), sacPM$Site[!early]))
+
 ans <- lapply(early.split, function(x) julian(x$Date))
 
 result <- lapply(late.split, function(late) {
@@ -84,7 +86,7 @@ permWeekly <- function(late.split){
 
 # OK, looks like it is OK - more or less symetric with center at 0
 # most of spread is betwee -1,1
-
+aa <- permWeekly(late.split)
 plot(density(aa[,"weekly"] - aa[,"daily"]), xlim = c(-6, 6), ylim = c(0,2))
 sapply(1:100, function(y){
     aa <- permWeekly(late.split)
