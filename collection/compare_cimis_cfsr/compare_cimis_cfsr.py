@@ -95,5 +95,5 @@ def compare():
         #print(cimis['datetime'][i])
         
         
-load_CFSR_data()
+#load_CFSR_data()
 compare()
