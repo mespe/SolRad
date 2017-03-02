@@ -1,0 +1,122 @@
+
+
+|S1 ref_date_time(time, tstrlen)
+    name: ref_date_time
+    long_name: reference date and time as YYYYMMDDHH
+
+
+
+int32 forecast_hour(time)
+    long_name: forecast hour
+    units: hours
+
+
+
+float32 lat(lat)
+    name: lat
+    long_name: latitude
+    units: degree_north
+    valid_range: [ 39.5  39.5]
+
+
+float32 lon(lon)
+    name: lon
+    long_name: longitude
+    units: degree_east
+    valid_range: [ 238.  238.]
+
+
+
+
+float32 SHTFL_L1_Avg_1(time, lat, lon)
+    long_name: Sensible heat flux
+    product_description: 1-hour Average
+    units: W m-2
+    level: Ground or water surface
+
+
+
+float32 LHTFL_L1_Avg_1(time, lat, lon)
+    long_name: Latent heat flux
+    product_description: 1-hour Average
+    units: W m-2
+    level: Ground or water surface
+
+
+
+
+float32 DLWRF_L1_Avg_1(time, lat, lon)
+    long_name: Downward longwave radiation flux
+    product_description: 1-hour Average
+    units: W m-2
+    level: Ground or water surface
+
+
+
+
+float32 ULWRF_L1_Avg_1(time, lat, lon)
+    long_name: Upward longwave radiation flux
+    product_description: 1-hour Average
+    units: W m-2
+    level: Ground or water surface
+
+
+
+
+float32 USWRF_L1_Avg_1(time, lat, lon)
+    long_name: Upward shortwave radiation flux
+    product_description: 1-hour Average
+    units: W m-2
+    level: Ground or water surface
+
+
+
+
+float32 DSWRF_L1_Avg_1(time, lat, lon)
+    long_name: Downward shortwave radiation flux
+    product_description: 1-hour Average
+    units: W m-2
+    level: Ground or water surface
+
+
+
+float32 GFLUX_L1_Avg_1(time, lat, lon)
+    long_name: Ground heat flux
+    product_description: 1-hour Average
+    units: W m-2
+    level: Ground or water surface
+
+
+
+
+float32 CSDLF_L1_Avg_1(time, lat, lon)
+    long_name: Clear sky downward longwave flux
+    product_description: 1-hour Average
+    units: W m-2
+    level: Ground or water surface
+
+
+
+
+float32 CSUSF_L1_Avg_1(time, lat, lon)
+    long_name: Clear sky upward solar flux
+    product_description: 1-hour Average
+    units: W m-2
+    level: Ground or water surface
+
+
+
+float32 CSDSF_L1_Avg_1(time, lat, lon)
+    long_name: Clear sky downward solar flux
+    product_description: 1-hour Average
+    units: W m-2
+    level: Ground or water surface
+
+
+
+float32 CSULF_L1_Avg_1(time, lat, lon)
+    long_name: Clear sky upward longwave flux
+    product_description: 1-hour Average
+    units: W m-2
+    level: Ground or water surface
+
