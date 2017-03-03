@@ -1,5 +1,40 @@
 ##Running report
 
+2 March 2017
+-----
+
+More exploration of the CARB data (see CARB_perm.R):
+
+ - Comparing the values for the weekly data (1999-2006) to the
+   daily-ish values (2007-2015), it seems the weekly values are on
+   average similar, but have fewer extreme values. This makes sense if
+   we expect a 1/7 chance for observations to coincide with a high
+   polution day. Henry brought up a good point that we should check
+   the day of the week which is sampled, as there might be some trends
+   within a week.
+ - The mean is more highly affected by this compared to the median,
+   but we might be interested in the extreme values.
+ - Need to explore if the same trends observed in the PM2.5 data are
+   similar in the PM10 data.
+
+Solar radiation:
+ - Plotting the solar by year shows some variation (see explore.R),
+ within and between years. We need to understand this a bit better.
+	 1. Compare to other stations, see if trends are seen in nearby
+        areas.
+	 2. Compare to clear-sky values (solar radiation without
+        interception from clouds/pollution, etc). See if trends have
+        anything to do with air conditions vs natural variation from
+        sun.
+	 3. Figure out how to fill in missing data
+ 
+Yield:
+ - State average yield with the week # of emergence (start) and
+   harvest (end) have been added to github. Need to combine with solar
+   radiation data and start exploring possible relationships.
+   
+   
+
 23 Feb 2017
 -----
 

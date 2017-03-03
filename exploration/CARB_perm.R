@@ -76,8 +76,8 @@ permWeekly <- function(late.split){
         })
         ##browser()
         
-        return(data.frame(weekly = mean(weekly, na.rm = TRUE),
-                          daily = mean(x$Value[week(x$Date) %in% 20:44], na.rm = TRUE)))
+        return(data.frame(weekly = median(weekly, na.rm = TRUE),
+                          daily = median(x$Value[week(x$Date) %in% 20:44], na.rm = TRUE)))
 
     })
 
