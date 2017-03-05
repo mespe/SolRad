@@ -1,18 +1,22 @@
-#script assumes that desired temporal coverage (in years) is determined during CIMIS data query, so defining a subset of years is not a part of this script
+#1 script requires CIMIS datasets derived from the related CIMIS API R script and USDA yield data that includes pre-calculated mean emergence and harvest dates to determine the growing season for each year for which to aggregate data.  Directories for these data are defined at the beginning of the script.
 
-#focus of QC check is currently on solar radiation data.  but concept is to expand last function to include other CIMIS variables (eg. temp) with different specifications needed
+#2 script assumes that desired temporal coverage (in years) is determined during CIMIS data query, so defining a subset of years is not a part of this script
 
-#script ignores NAs.  No gap filling is currently performed.
+#3 focus of QC check is currently on solar radiation data.  but concept is to expand last function to include other CIMIS variables (eg. temp) with different specifications needed
 
-#script will create two subdirectories from where the CIMIS data is located: 
-#(1) QC_results: two files are created for each station.  '[stationID]_timeseries_QCsummary.txt' describes if temporal gaps exists in a station's dataset.  'missing_solrad_counts_[stationID & years].csv' descrbes how many missing solar radiation values occurred by each month across all years.  We do not currently distinguish between NAs that occur at night versus during the day.
-#(2) aggregated_data: two files are created for each station: summaries of solar radiation and temperature during the growing season by day and by year.  This includes aggregated estimates of solar radiation as follows: daily sums, annual sums, and annual average of daily sums.  And aggregated estimates of temperature as follows: daily minimums and maximums and annual averages of daily min and max.
+#4 script ignores NAs.  No gap filling is currently performed.  This could be addressed
+
+#5 script will create two subdirectories from where the CIMIS data is located: 
+#(a) QC_results: two files are created for each station.  '[stationID]_solrad_NA_summary.txt"' describes how many and where NAs occur during daylight hours for solar radiation data.  'missing_solrad_counts_[stationID & years].csv' descrbes how many missing solar radiation values occurred by each month across all years during daylight hours, defined as between 6 am and 9 pm.  
+#(b) aggregated_data: two files are created for each station: summaries of solar radiation and temperature during the growing season by day and by year.  This includes aggregated estimates of solar radiation as follows: daily sums, annual sums, and annual average of daily sums.  And aggregated estimates of temperature as follows: daily minimums and maximums and annual averages of daily min and max.
+
+#and here begins the script
 
 #define where data is located and where output from this script will go
 mainDir <- 'C:/Users/smdevine/Desktop/DSI_meetings/air_pollution_crop_yield_project/data/CIMIS'
 growseasonDir <- 'C:/Users/smdevine/Desktop/DSI_meetings/air_pollution_crop_yield_project/data'
 
-#crop yield data for start and stop of each growing season
+#read-in crop yield data for definitions of start and stop of each growing season
 setwd(growseasonDir)
 cropyields <- read.csv('state_rice_yield.csv', stringsAsFactors = FALSE)
 #head(cropyields)
@@ -56,13 +60,13 @@ fix_time <- function() {
   time_series_hourly <- seq(from=df$Date.time[1], to=tail(df$Date.time, 1), by='hour')
   time_series_hourly <- as.POSIXlt(time_series_hourly, tz="US/Arizona")
   if (nrow(df) < length(time_series_hourly)) { #then some times are missing, they need to be merged in from the synthetic time series
-    z <- !(time_series_hourly %in% df$Date.time)
-    missing_times <- as.POSIXlt(time_series_hourly[z])
-    warning_message1 <- paste('WARNING! There are', as.character(length(missing_times)), 'missing times in this stations time series:', paste(missing_times, collapse=', '))
-    setwd(file.path(mainDir, QC_results))
-    time_series_QC <- file(paste(df$Stn.Name[1], '_stnID_', df$Stn.Id[1], "_timeseries_QCsummary.txt", sep=''))
-    writeLines(warning_message1, time_series_QC)
-    close(time_series_QC)
+    # z <- !(time_series_hourly %in% df$Date.time)
+    # missing_times <- as.POSIXlt(time_series_hourly[z])
+    # warning_message1 <- paste('WARNING! There are', as.character(length(missing_times)), 'missing times in this stations time series:', paste(missing_times, collapse=', '))
+    # setwd(file.path(mainDir, QC_results))
+    # time_series_QC <- file(paste(df$Stn.Name[1], '_stnID_', df$Stn.Id[1], "_timeseries_QCsummary.txt", sep=''))
+    # writeLines(warning_message1, time_series_QC)
+    # close(time_series_QC)
     time_series_hourly_df <- as.data.frame(time_series_hourly)
     colnames(time_series_hourly_df) <- 'Date.time'
     time_series_hourly_df$Date.time <- as.POSIXlt(time_series_hourly_df$Date.time, tz='US/Arizona')
@@ -75,14 +79,13 @@ fix_time <- function() {
   df$Date <- as.Date(df$Date.time, format='%m/%d/%Y') #add simplified date column
   df$Year <- strftime(df$Date.time, format='%Y')
   df$Month <- strftime(df$Date.time, format='%m')
-  df$Day <- strftime(df$Date.time, format='%d')
   df$Week <- strftime(df$Date.time, format = '%U')
   df$DOY <- strftime(df$Date.time, format = '%j')
   #write.csv(df, paste(df$Stn.Name[1], '_', as.character(min(df$Year)), '_', as.character(max(df$Year)), '_time_fixed.csv', sep=''), row.names = FALSE)
   return(df)
 }
 
-i=1 #use this for the time being if there is only one station's data.  With more than one CIMIS station data set, function could be put inside loop and applied to each station's data, along with the functions below.
+i=1 #use this for the time being if there is only one station's data.  With more than one CIMIS station data set, function could be put inside loop and applied to each station's data, along with the functions below.  this would require some reorganization of the lines below.
 CIMIS_df <- fix_time()
 
 #growing season function
@@ -100,6 +103,13 @@ growseason_trim <- function(df, df2) {
 
 CIMIS_df_growseason <- growseason_trim(CIMIS_df, cropyields)
 
+#function to determine if a time is within a certain interval
+daylight_hour_test <- function(sunrise_hr, sunset_hr, x) {
+  y <- as.integer(strftime(x, format = '%H'))
+  y >= sunrise_hr & y <= sunset_hr
+}
+
+
 #temp arguments to run function manually  
 varname <- 'Sol.Rad..W.sq.m.'
 df <- CIMIS_df_growseason
@@ -115,19 +125,23 @@ negpolicy <- 'Yes'
     if (negpolicy == 'Yes') {  
       df[[varname]][which(df[varname] < 0)] <- 0 #convert negative numbers to 0 for solar radiation--SHOULD I do this?  Colusa had three values at -6999, which is obviously non-sensical.
     }
-    NA_count_matrix <- as.data.frame(tapply(df[[varname]], list(df$Year, df$Month), count_NAs))
+    df$daylight <- daylight_hour_test(6, 21, df$Date.time)
+    NA_count_matrix_daylight <- as.data.frame(tapply(df[[varname]][which(df$daylight == TRUE)], list(df$Year[which(df$daylight == TRUE)], df$Month[which(df$daylight == TRUE)]), count_NAs))
+    j <- which(is.na(df[[varname]]))
+    times_NA <- df$Date.time[j]
+    times_NA_daylight <- times_NA[which(daylight_hour_test(6, 21, times_NA))]
     daily_solrad <- as.data.frame(tapply(df[[varname]], df$Date, sum, na.rm=TRUE))
     colnames(daily_solrad) <- paste(varname, '_sum_daily', sep = '')
     daily_solrad$Date <- strptime(rownames(daily_solrad), format='%Y-%m-%d')
-    daily_solrad$NA_count_hourly <- tapply(df[[varname]], df$Date, count_NAs)
-    daily_solrad$TMIN <- tapply(df$Air.Temp..C., df$Date, min, na.rm=TRUE) #this and other lines referring to temperature could go into a separate part of this function
+    daily_solrad$NA_count_hourly_daylight <- tapply(df[[varname]][which(df$daylight==TRUE)], df$Date[which(df$daylight==TRUE)], count_NAs)
+    daily_solrad$TMIN <- tapply(df$Air.Temp..C., df$Date, min, na.rm=TRUE) #this and other lines referring to temperature could go into a separate part of this function where we set up as if (varname == 'Air.Temp..C.') {...
     daily_solrad$TMAX <- tapply(df$Air.Temp..C., df$Date, max, na.rm=TRUE)
     daily_solrad$Year <- strftime(daily_solrad$Date, format='%Y')
     annual_solrad <- as.data.frame(tapply(df[[varname]], df$Year, sum, na.rm=TRUE))
     colnames(annual_solrad) <- paste(varname, '_sum_growing_season', sep = '')
     annual_solrad[[paste(varname, '_mean_daily_sums', sep = '')]] <- tapply(daily_solrad[[paste(varname, '_sum_daily', sep = '')]], daily_solrad$Year, mean, na.rm=TRUE)
     annual_solrad$Year <- as.integer(rownames(annual_solrad))
-    annual_solrad$NA_count_hourly <- tapply(df[[varname]], df$Year, count_NAs)
+    annual_solrad$NA_count_hourly_daylight <- tapply(df[[varname]][which(df$daylight == TRUE)], df$Year[which(df$daylight == TRUE)], count_NAs)
     annual_solrad$Growing_Start_DOY <- as.numeric(tapply(df$DOY, df$Year, min))
     annual_solrad$Growing_Stop_DOY <- as.numeric(tapply(df$DOY, df$Year, max))
     annual_solrad$Growing_length <- annual_solrad$Growing_Stop - annual_solrad$Growing_Start
@@ -137,7 +151,12 @@ negpolicy <- 'Yes'
     write.csv(daily_solrad, paste('daily_solrad_summary_', df$Stn.Name[1], '_', as.character(min(df$Year)), '_', as.character(max(df$Year)), '.csv', sep=''), row.names = FALSE)
     write.csv(annual_solrad, paste('annual_solrad_summary_', df$Stn.Name[1], '_', as.character(min(df$Year)), '_', as.character(max(df$Year)), '.csv', sep=''), row.names = FALSE)
     setwd(file.path(mainDir, QC_results))
-    write.csv(NA_count_matrix, paste('missing_solrad_counts_', df$Stn.Name[1], '_', as.character(min(df$Year)), '_', as.character(max(df$Year)), '.csv', sep=''))
+    write.csv(NA_count_matrix_daylight, paste('solrad_NA_counts_daylight_', df$Stn.Name[1], '_stnID_', df$Stn.Id[1], '_', as.character(min(df$Year)), '_', as.character(max(df$Year)), '.csv', sep=''))
+    warning_message1 <- paste('WARNING! There are', as.character(length(times_NA_daylight)), 'missing data for solar radiation during daylight hours in this stations time series:', paste(times_NA_daylight, collapse=', '))
+    setwd(file.path(mainDir, QC_results))
+    solrad_QC <- file(paste(df$Stn.Name[1], '_stnID_', df$Stn.Id[1], "_solrad_NA_summary.txt", sep=''))
+    writeLines(warning_message1, solrad_QC)
+    close(solrad_QC)
 }
 
 #} #to end future loop through multiple CIMIS station datasets 
