@@ -25,4 +25,4 @@ all_weather <- lapply(1992:2016, function(year){
 
 all_weather <- do.call(rbind, all_weather)
 
-write.csv(all_weather, file = "CIMIS1992_2016.csv", row.names = FALSE)
+write.csv(all_weather, file = "../data/CIMIS1992_2016.csv", row.names = FALSE)

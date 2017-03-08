@@ -23,7 +23,7 @@ library(rgdal)
 # usda_rice[usda_rice < 0.01] <- NA
 # usda_rice <- trim(usda_rice)
 # save(usda_rice, file = "rice_raster.Rda")
-load("rice_raster.Rda")
+load("../data/rice_raster.Rda")
 ###################################
 
 data_dir <- "~/Downloads/"

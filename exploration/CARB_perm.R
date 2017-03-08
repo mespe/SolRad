@@ -93,3 +93,19 @@ sapply(1:100, function(y){
     lines(density(aa[,"weekly"] - aa[,"daily"]), col = rgb(0,0,0,.2))
 })
 
+
+################ Check the PM10 data for similar patterns ##############
+data_dir <- "~/Downloads/"
+
+pm10 <- read.csv(paste0(data_dir, "PM10_weekly_data_98_14.csv"), stringsAsFactors = FALSE)
+
+# Make sure we are only looking at the sites in the sac valley
+pm10 <- pm10[pm10$Site %in% sac_sites,]
+pm10$Date <- as.Date(pm10$Date, "%m/%d/%Y")
+
+plot(Value ~ Date, pm10, pch = 16, col = rgb(0,0,0,0.2))
+
+# These data look to be truly weekly
+plot(table( format(pm10$Date, "%Y")))
+
+
