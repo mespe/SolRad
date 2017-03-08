@@ -1,5 +1,12 @@
 ##Running report
 
+9 March 2017
+-----
+
+CARB: We only have weekly measurements for PM10, but there are not
+large differences between years (roughly equal number of measurements
+per year).
+
 2 March 2017
 -----
 
