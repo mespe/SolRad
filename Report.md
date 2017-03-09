@@ -6,6 +6,19 @@
 CARB: We only have weekly measurements for PM10, but there are not
 large differences between years (roughly equal number of measurements
 per year).
+ 
+Yield:
+
+Solar Radiation: Clear sky vs CIMIS - overall, the trends match fairly
+well between the Clear sky vs observed. Look at data form 1980-2010,
+see what relationship exists between the before atm and ground
+flux. Depending on results (e.g., there are trends and etc.), we can
+go forward  with these data. CFSv2 has data from 2010 -
+today. Redundent info - use both CFSR and CIMIS
+
+Look at data on smoke and dust [ MATT ]
+
+
 
 2 March 2017
 -----
