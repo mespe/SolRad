@@ -1,44 +1,77 @@
 ## Exploring the yield and solar radiation data
 ## March 2017
 
-yield <- read.csv("../data/state_rice_yield.csv", stringsAsFactors = FALSE)
+yield <- read.csv("../data/rice_yield_avg_timing.csv", stringsAsFactors = FALSE)
 
 srad <- read.csv("../data/daily_solrad_summary_Colusa_1992_2015.csv",
                  stringsAsFactors = FALSE)
 
+yield[,5:7] <- lapply(yield[,5:7], as.Date)
 srad$Date <- as.Date(srad$Date, "%Y-%m-%d")
 
-srad_weekly <- aggregate(srad$Sol.Rad..W.sq.m._sum_daily,
-                         list(format(srad$Date, "%Y"),
-                              format(srad$Date, "%W")),
-                         FUN = sum)
+# srad_weekly <- aggregate(srad$Sol.Rad..W.sq.m._sum_daily,
+#                          list(format(srad$Date, "%Y"),
+#                               format(srad$Date, "%W")),
+#                          FUN = sum)
 
-split_rad <- split(srad_weekly, srad_weekly$Group.1)
+# split_rad <- split(srad_weekly, srad_weekly$Group.1)
+
+##### Revised version that uses dates rather than week number
 
 sum_srad <- function(sol_rad, start, end){
-    i <- sol_rad$Group.2 %in% start:end
-    sum(sol_rad$x[i])
+    i <- sol_rad$Date %in% seq(start, end, by = "day")
+    sum(sol_rad$Sol.Rad..W.sq.m._sum_daily[i])
 }
 
-ans <- lapply(1:nrow(yield), function(j){
-##    browser()
-    
-    tmp <- split_rad[[as.character(yield$year[j])]]
-    sum_srad(tmp, yield$avg_emerg[j], yield$avg_harv[j])
+#vegetative phase = emerge to flower
+yield$veg_srad <- sapply(1:nrow(yield), function(i){
+    sum_srad(srad, yield$EMERGED[i], yield$HEADED[i])
 })
 
-yield$srad <- do.call(c, ans)
+# grain-fill = flower to harvest
+yield$gf_srad <- sapply(1:nrow(yield), function(i){
+    sum_srad(srad,yield$HEADED[i], yield$HARVESTED[i])
+})
 
-#########
-yield$Value <- as.numeric(gsub(",","", yield$Value))
+yield$total_srad <- sapply(1:nrow(yield), function(i){
+    sum_srad(srad,yield$EMERGED[i], yield$HARVESTED[i])
+})
 
-plot(Value ~ srad, data = yield[-25,])
+##########
+# Remove 2016
+yield <- yield[-25,]
 
-mod <- lm(Value ~ srad, data = yield[-25,])
+plot(yield_lb_ac ~ total_srad, data = yield)
+
+mod <- lm(yield_lb_ac ~ total_srad, data = yield)
 abline(mod)
 
+
+########## Plot all three ##########
+i <- grep("srad", colnames(yield))
+
+par(mfrow = c(1,3))
+lapply(i, function(j){
+
+    plot(yield_lb_ac ~ yield[,j], data = yield)
+    
+    mod <- lm(yield_lb_ac ~ yield[,j], data = yield)
+    abline(mod)
+    summary(mod)
+    })
+
+# Looks like very little effect of vegetative
+# the impact is for grain fill and then season total
+
 ###########
-source("../collection/get_weekly_rice_growing.R")
+# Quick and dirty model selection
+library(MASS)
+mm <- lm(yield_lb_ac ~ veg_srad + gf_srad + total_srad, data = yield)
+stepAIC(mm)
+
+
+##### Previous code using week numbers - probably broken######
+source("../collection/get_weekly_rice_growing.R")o
 
 ans2 <- lapply(split_rad, function(x){
     i <- match(paste(x$Group.1, x$Group.2),
