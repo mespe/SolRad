@@ -238,6 +238,7 @@ getAvgDates <- function(riceDF){
                       avg_emerg, avg_harv))
 }
 
+
 findAvg <- function(percents, weeks){
     # Finds the 50% point, given a vector with weekly %
     # x: vector representing 
@@ -248,3 +249,11 @@ findAvg <- function(percents, weeks){
 
 }
 
+mungeTiming <- function(x){
+    x$year <- as.integer(x$year)
+    x$week_ending <- as.Date(x$week_ending, "%Y-%m-%d")
+    x$Value <- as.numeric(x$Value) / 100
+    x$week_nbr <- as.numeric(gsub("WEEK [#]", "", x$reference_period_desc))
+    return(x)
+
+}
