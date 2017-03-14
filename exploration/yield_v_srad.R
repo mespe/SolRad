@@ -1,26 +1,33 @@
 ## Exploring the yield and solar radiation data
 ## March 2017
 
+library(zoo)
+
 yield <- read.csv("../data/rice_yield_avg_timing.csv", stringsAsFactors = FALSE)
 
-srad <- read.csv("../data/daily_solrad_summary_Colusa_1992_2015.csv",
+# Using the daily solar radiation data
+srad <- read.csv("../data/CIMIS1992_2016.csv",
                  stringsAsFactors = FALSE)
+
+# Remove obs. 926 - solrad value is 8x higher than other stations
+srad[srad$Date == "1992-07-14",]
+srad <- srad[-926,]
 
 yield[,5:7] <- lapply(yield[,5:7], as.Date)
 srad$Date <- as.Date(srad$Date, "%Y-%m-%d")
 
-# srad_weekly <- aggregate(srad$Sol.Rad..W.sq.m._sum_daily,
-#                          list(format(srad$Date, "%Y"),
-#                               format(srad$Date, "%W")),
-#                          FUN = sum)
+srad <- aggregate(DaySolRadAvg.Value ~ Date, data = srad, mean, na.rm = TRUE)
 
-# split_rad <- split(srad_weekly, srad_weekly$Group.1)
+ss <- seq(min(srad$Date), max(srad$Date), by = "day")
+ss[!ss %in% srad$Date]
 
+srad$DaySolRadAvg.Value <- na.approx(srad$DaySolRadAvg.Value)
+srad$Date[is.na(srad$DaySolRadAvg.Value)]
 ##### Revised version that uses dates rather than week number
 
 sum_srad <- function(sol_rad, start, end){
     i <- sol_rad$Date %in% seq(start, end, by = "day")
-    sum(sol_rad$Sol.Rad..W.sq.m._sum_daily[i])
+    sum(sol_rad$DaySolRadAvg.Value[i])
 }
 
 #vegetative phase = emerge to flower
@@ -53,7 +60,11 @@ i <- grep("srad", colnames(yield))
 par(mfrow = c(1,3))
 lapply(i, function(j){
 
-    plot(yield_lb_ac ~ yield[,j], data = yield)
+    plot(yield_lb_ac ~ yield[,j], data = yield,
+         main = colnames(yield[j]),
+         xlab = "Sum solar radiation",
+         ylab = "Yield (lbs/ac)",
+         pch = 16)
     
     mod <- lm(yield_lb_ac ~ yield[,j], data = yield)
     abline(mod)
@@ -68,6 +79,11 @@ lapply(i, function(j){
 library(MASS)
 mm <- lm(yield_lb_ac ~ veg_srad + gf_srad + total_srad, data = yield)
 stepAIC(mm)
+
+
+########### Is this confounding from the planting date#####
+
+plot(veg_srad ~ format(EMERGED, "%j"), yield)
 
 
 ##### Previous code using week numbers - probably broken######
