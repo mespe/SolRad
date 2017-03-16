@@ -26,7 +26,7 @@ def load_CFSR_data():
 
     time_np = netCDF4.num2date(times[:],times.units) -pd.offsets.Hour(8)
     
-    print(time_np.shape)
+    #print(time_np.shape)
     
 
     variables = {"SHTFL_L1_Avg_1" : "Sensible heat flux",
@@ -41,10 +41,11 @@ def load_CFSR_data():
     
     
     #downward_solar_flux_np = fh.variables["DSWRF_L1_Avg_1"][:,0,0] + fh.variables["DLWRF_L1_Avg_1"][:,0,0]- fh.variables["USWRF_L1_Avg_1"][:,0,0] - fh.variables["ULWRF_L1_Avg_1"][:,0,0]
-    downward_solar_flux_np = (fh.variables["SHTFL_L1_Avg_1"][:,0,0] + fh.variables["LHTFL_L1_Avg_1"][:,0,0] + 
-                             fh.variables["DSWRF_L1_Avg_1"][:,0,0] + fh.variables["DLWRF_L1_Avg_1"][:,0,0] -  
-                             fh.variables["USWRF_L1_Avg_1"][:,0,0] - fh.variables["ULWRF_L1_Avg_1"][:,0,0] + 
-                             fh.variables["GFLUX_L1_Avg_1"][:,0,0]  )
+    downward_solar_flux_np = fh.variables['"DSWRF_L1_Avg_1"'][:, 0, 0]
+                            #(fh.variables["SHTFL_L1_Avg_1"][:,0,0] + fh.variables["LHTFL_L1_Avg_1"][:,0,0] + 
+                             #fh.variables["DSWRF_L1_Avg_1"][:,0,0] + fh.variables["DLWRF_L1_Avg_1"][:,0,0] -  
+                             #fh.variables["USWRF_L1_Avg_1"][:,0,0] - fh.variables["ULWRF_L1_Avg_1"][:,0,0] + 
+                             #fh.variables["GFLUX_L1_Avg_1"][:,0,0]  )
                             
     
     
@@ -81,8 +82,6 @@ def compare():
     
     
     cfsr = pd.read_pickle('cfsr_2005_2010.pkl')
-    
-    
     
     
     plt.plot(cfsr['datetime'][:250], cfsr['solar rad'][:250], label = "cfsr")
