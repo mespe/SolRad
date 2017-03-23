@@ -1,5 +1,38 @@
 ##Running report
 
+23 March
+--------
+
+Low attendance due to confusion about meeting.
+
+No meeting next week (Spring break)
+
+Covariates on yield: Retrieved many covariates on yield, started some
+basic analysis using linear regression. There are some unexpected
+relationships which we need to check into. 
+
+It would be good to be ready to jump into analysis the week following
+Spring break (~ 3 - 6 Apr). Right now, we are close to being able to
+do this, but using State average yields and average of CIMIS data for
+temp and solar radiation. Designing such that future changes to these
+data can be easily integrated.
+
+Need update on the CFSR work. 
+
+16 March
+---------
+
+CFSR: Downward shortwave (before clouds), clearsky downward shortwave
+flux (after clouds). 
+
+Big questions:
+ - can we get a measure of our quantity of interest? 
+ - Understand bias, disagreements between CIMIS.
+ 
+ 
+
+CIMIS: Arizona time zone (no DST)
+
 9 March 2017
 -----
 
