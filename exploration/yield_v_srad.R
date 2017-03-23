@@ -45,6 +45,8 @@ yield$total_srad <- sapply(1:nrow(yield), function(i){
     sum_srad(srad,yield$EMERGED[i], yield$HARVESTED[i])
 })
 
+save(yield, file = "../data/yield_w_srad.rda")
+
 ##########
 # Remove 2016
 yield <- yield[-25,]
@@ -126,7 +128,7 @@ abline(mm)
 plot(
 
 ##### Previous code using week numbers - probably broken######
-source("../collection/get_weekly_rice_growing.R")o
+source("../collection/get_weekly_rice_growing.R")
 
 ans2 <- lapply(split_rad, function(x){
     i <- match(paste(x$Group.1, x$Group.2),
