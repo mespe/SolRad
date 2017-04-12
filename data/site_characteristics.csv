@@ -1,0 +1,29 @@
+ID,site,county,Maturity,lat,lon,first_year,last_year,soil series,soil_id,ele (m)
+1,Akin,Sutter,I/L,38.93,-121.68,2000,2005,Marcum-Gridley clay loams,1,7
+2,Brumley,San Joaquin,VE,37.84,-120.97,1999,2005,Madera-Alamo complex,2,37
+3,De Rio,San Joaquin,VE,38.14,-121.46,2007,2013,Shinkee muck,4,-3
+4,Dennis,Colusa,E,39.29,-122.12,1999,2013,Willows silty clay,3,19
+5,Erdman,Yolo,VE,38.88,-121.87,2004,2013,Sacramento clay,5,3
+6,Geer,Yolo,VE,38.86,-121.83,1999,2005,Sacramento clay,5,5
+7,Harris,Butte,E,39.38,-121.92,2002,2002,Marvin silty clay loam,6,20
+8,Larriabee,Butte,E,39.49,-121.91,2006,2013,Landlow clay,7,26
+9,Lauppe,Sutter,VE,38.76,-121.54,1999,2013,Galt clay,8,3
+10,Marler,Yuba,E,39.21,-121.57,1999,2012,Kimball loam,9,20
+11,Mathews,Yuba,E,39.22,-121.54,2013,2013,Trainer loam,10,21
+12,Quad-4,Yuba,E,39.21,-121.57,1999,2005,Kimball loam,9,20
+13,RES,Butte,,39.46,-121.73,1999,2013,Esquon-Neerdobe,11,28
+14,Rystrom,Butte,E,39.55,-121.82,2005,2005,Esquon-Neerdobe,11,32
+15,Skinner,Butte,E,39.58,-121.9,2000,2000,Lofgren-Blavo,12,32
+16,Thompson,Butte,E,39.53,-121.91,2001,2004,Landlow clay,7,30
+17,Tucker,Sutter,I/L,38.92,-121.73,2006,2008,Clear Lake clay,13,5
+18,Tucker2,Sutter,I/L,38.95,-121.79,2009,2013,Clear Lake clay,13,6
+19,Wylie,Glenn,I/L,39.4,-122.23,1999,2013,Willows clay,3,34
+21,Canal,Colusa,E,39.29,-122.12,1999,2013,Willows silty clay,3,19
+22,Unknown,Butte,E,39.53,-121.91,2001,2004,Landlow clay,7,30
+23,Penning,Sutter,I/L,38.87,-121.7,,,,,
+24,McKnight,Butte,,39.522,-121.59,,,,,
+25,Bosworth,Yuba,E,38.996,-121.543,2015,2015,,,
+26,Brugman,Sutter,,39.14,-121.64,,,,,
+27,Extra Blast Site,Butte,,39.46,-121.73,,,,,
+28,Owens,Butte,,39.52,-121.75,,,,,
+29,Peacock,Sutter,,39,-121.69,,,,,
