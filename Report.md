@@ -1,5 +1,24 @@
 ##Running report
 
+12 April
+-------
+
+Welcome back - 
+
+We briefly chatted about what ground we have covered so far, including
+some issues with using the State Average yields. Overall, it seems
+using the State average is challenging because it only is 24 data
+points, which makes it difficult to use.
+
+We agreed to use the variety trial data for the Rice Experiment
+Station to go forward, as this has roughly 8K obs., which should be
+enough to actually test some of our questions. We are leaving open the
+possibility to use the full data set (30K obs), but this opens up a
+lot of complexities due to the different sites, etc.
+
+
+
+
 23 March
 --------
 
