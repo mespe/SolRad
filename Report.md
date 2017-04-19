@@ -1,5 +1,15 @@
 ##Running report
 
+19 April
+
+-------
+
+Not much was done last week:
+
+- Solar radiation: Lumin thinks that we haven't been pulling data from one of our solar radation data sources correctly. He is going to look into this this week. Once he is satisfied with the data he is getting from this source, the team working from this data source will continue.
+
+- Yield/Modeling: Nothing was done on this last week. Since Scott and Henry are available again, this part of the project should starting moving soon.
+
 12 April
 -------
 
