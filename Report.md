@@ -1,5 +1,28 @@
 ##Running report
 
+26 April
+-------
+
+Talked about steps forward - The solar radiation data is looking
+really nice. Good differentiation between atmospheric and ground -
+good job guys. 
+
+We need to start thinking about the analysis - first step is to get
+the data in a format that allows for modeling. Matt has this, just
+needs to alter the code to handle solar radiation. Next week will be a
+working meeting - we want to start building some models.
+
+We still need to get the optical aerosol depth data - should not be
+too difficult, but might require downloading a raster, and then
+extracting the pixel of interest.
+
+Lastly, we talked about setting this project up for
+reproducibility. Matt talked about flagging file dependencies so we
+can build a Makefile to control the building of the project from data
+recovery to the final report. We also talked about using Docker to
+handle dependencies. As companies want people with Docker and AWS experience,
+we will look into it. 
+
 19 April
 
 -------

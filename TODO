@@ -1,5 +1,16 @@
 ##TO DO (Task) list:
 
+26 Apr
+------
+
+ - Write short report explaining where the data are located for Optical Aerosol Depth, how to retreive, etc. [Matt]
+ - Alter and upload script to calculate solar radiation for each time period for each observation [Matt]
+ - Explore what we need to do to move to AWS/Docker [Zamir, Luman]
+ - Retrieve OAD data [Matt or others]
+ - start thinking about modeling approaches
+ - 
+ 
+
 12 Apr
 -----
 
