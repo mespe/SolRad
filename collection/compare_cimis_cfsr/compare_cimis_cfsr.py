@@ -8,16 +8,16 @@ import netCDF4
 
 def load_CFSR_data():
     
-    my_example_nc_file = 'pgbh01.gdas.20052010.nc' # latitude, longitude = (39.5, -122)
+    my_example_nc_file = 'RES.nc' # latitude, longitude = (39.5, -122)
     
     fh = Dataset(my_example_nc_file, mode='r')
     
-    #print(fh.variables.keys())
+    print(fh.variables.keys())
 
     print(help(fh.variables['time']))
 
     
-    #print(fh.variables['time'].name)
+    print(fh.variables['time'].name)
     
     ####time = fh['time'][:]    
     ####print(time)
@@ -41,7 +41,7 @@ def load_CFSR_data():
     
     
     #downward_solar_flux_np = fh.variables["DSWRF_L1_Avg_1"][:,0,0] + fh.variables["DLWRF_L1_Avg_1"][:,0,0]- fh.variables["USWRF_L1_Avg_1"][:,0,0] - fh.variables["ULWRF_L1_Avg_1"][:,0,0]
-    downward_solar_flux_np = fh.variables['"DSWRF_L1_Avg_1"'][:, 0, 0]
+    downward_solar_flux_np = fh.variables["CSDLF_L1_Avg_1"][:, 0, 0]
                             #(fh.variables["SHTFL_L1_Avg_1"][:,0,0] + fh.variables["LHTFL_L1_Avg_1"][:,0,0] + 
                              #fh.variables["DSWRF_L1_Avg_1"][:,0,0] + fh.variables["DLWRF_L1_Avg_1"][:,0,0] -  
                              #fh.variables["USWRF_L1_Avg_1"][:,0,0] - fh.variables["ULWRF_L1_Avg_1"][:,0,0] + 
@@ -50,7 +50,7 @@ def load_CFSR_data():
     
     
     
-    print(downward_solar_flux_np.shape)
+    #print(downward_solar_flux_np.shape)
     
     
     
@@ -94,5 +94,5 @@ def compare():
         #print(cimis['datetime'][i])
         
         
-#load_CFSR_data()
-compare()
+load_CFSR_data()
+#compare()
