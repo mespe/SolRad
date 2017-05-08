@@ -26,7 +26,7 @@ yield[,c("planted","head_date")] = lapply(yield[,c("planted","head_date")], as.D
 # gf = heading - 35 d after
 
 # now sure which data set to use - set that here
-srad = by_day[[3]]
+srad = by_day[[2]]
 srad = srad[order(srad$datetime),]
 
 ans = sapply(1:nrow(yield), function(i){
@@ -40,3 +40,6 @@ ans = sapply(1:nrow(yield), function(i){
              rep_srad = sum(tmp[yield$pi[i]:yield$dth[i]]),
              gf_srad = sum(tmp[yield$dth[i]:length(tmp)])))
     })
+
+yield = cbind(yield, t(ans))
+

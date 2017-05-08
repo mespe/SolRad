@@ -1,5 +1,13 @@
 ##Running report
 
+3 May
+-------
+
+Solar radiation files: 
+ - atm_sf: at top of atmosphere, short wave
+ - ground_atm: mistake - deleted
+ - res_ground_sf: Shortwave flux at ground level 
+
 26 April
 -------
 
