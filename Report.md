@@ -1,5 +1,23 @@
 ##Running report
 
+17 May
+------
+
+ - Priority:
+   - Focus on completing analysis before end of quarter.
+   - If possible, look into Docker, but not at the cost of delaying
+     the results
+
+ - We are going to start modeling the data using different techniques.
+   - Need to think about how to compare the different models to
+     eachother.
+   - 
+
+10 May
+-------
+
+
+
 3 May
 -------
 
