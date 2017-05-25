@@ -47,7 +47,7 @@ write.csv(data.frame(date=NA,
           row.names = FALSE)
 
 ## for (i in 1:length(datesequence)) {
-setwd("aerosol_rasters/temp/")
+# setwd("aerosol_rasters/temp/") 
 mclapply(base_url2, function(x){
     get_output <- GET(x) #see ??? for guidelines on this because was not able to use the XML and RCurl packages to extract webpage links.  they only worked if I manually saved each webpage as a HTML file first
     ## doc = htmlParse(getURL(base_url2[i]))
@@ -55,18 +55,19 @@ mclapply(base_url2, function(x){
                           stringsAsFactors = FALSE)
     fname <- urls$`ftp-directory-list`[3,1]
     file_url <- paste0(x, fname)
-  ## setwd(file.path(dir, 'temp')) # This is dangerous
-    download.file(file_url, destfile = fname,
+    dest_file = paste0(dir, "/temp/", fname)
+    ## setwd(file.path(dir, 'temp')) # This is dangerous
+    download.file(file_url, destfile = dest_file,
                   mode = 'wb') #this fixed a problem https://gis.stackexchange.com/questions/213923/open-hdf4-files-using-gdal-on-windows
-    fname_tif <- gsub('hdf', 'tif', fname, fixed=TRUE) 
+    fname_tif <- gsub('hdf', 'tif', dest_file, fixed=TRUE) 
                           #gdalinfo(fname) #we got a good ole hdf4 file!  must set mode='wb' in download.file above for this to work or manually download files from the URL on my windows machine
-    sbs <- get_subdatasets(fname) #we need subdataset 12 "Coarse Resolution AOT at 550 nm"
-    gdal_translate(src_dataset = file_dest,
+    sbs <- get_subdatasets(dest_file) #we need subdataset 12 "Coarse Resolution AOT at 550 nm"
+    gdal_translate(src_dataset = dest_file,
                    dst_dataset = fname_tif,
                    of = 'GTiff', sd_index = 12) #should print NULL on the screen
     aod_tif <- raster(fname_tif)
     aod_value <- extract(aod_tif, res_station)
-    file.remove(file_dest)
+    file.remove(dest_file)
     file.remove(fname_tif)
     ## setwd(file.path(air_qualDir, 'results'))
                           # This is going to kill you - very inefficient
@@ -77,10 +78,10 @@ mclapply(base_url2, function(x){
                           filename=fname,
                           longitude=coordinates(res_station)[1],
                           latitude=coordinates(res_station)[2])
-    write.csv(results,
-              file = paste0(dir, 'results/AOD_riceyield_airqual_project.csv'),
+    write.table(results, sep = ",",
+              file = paste0(dir, '/results/AOD_riceyield_airqual_project.csv'),
             row.names = FALSE, append = TRUE, col.names = FALSE)
-}, mc.cores = 8L)
+}, mc.cores = 2L)
 
 ##     next
 ##   }
