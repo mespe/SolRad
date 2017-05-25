@@ -1,0 +1,160 @@
+<html>
+ <body>
+  <h2 id="step-1-create-an-aws-account">
+   Step 1. Create an AWS Account
+  </h2>
+  <p>
+   Visit
+   <a href="http://aws.amazon.com">
+    aws.amazon.com
+   </a>
+   to get started.
+  </p>
+  <p>
+   Amazon Web Services has a service called Elastic Compute Cloud (EC2), which allows you to launch virtual servers. This are called “instances” by Amazon.
+  </p>
+  <h2 id="step-2-launch-an-instance">
+   Step 2. Launch an Instance
+  </h2>
+  <ul>
+   <li>
+    Go to the EC2 Management Console
+   </li>
+   <li>
+    Click on the “Launch Instance” button.
+   </li>
+   <li>
+    Click “Community AMIs”
+   </li>
+   <li>
+    Search for “udacity-dl” AMI.
+   </li>
+   <li>
+    Click the “Select” button for the udacity-dl AMI.
+   </li>
+   <li>
+    AMI (Amazon Machine Images) contains all the environment files and drivers for you to train on a GPU. It has cuDNN, TensorFlow with GPU support, Python 3, and all the other packages installed.
+   </li>
+  </ul>
+  <h2 id="step-3-configure-instance">
+   Step 3. Configure instance
+  </h2>
+  <ul>
+   <li>
+    Select instance type, from free tier to GPU instances.
+   </li>
+   <li>
+    Select storage
+   </li>
+   <li>
+    <p>
+     Security group
+    </p>
+    <ul>
+     <li>
+      Click on “Edit security groups”
+     </li>
+    </ul>
+    <p>
+     <img src="aws-add-sec-group.png" width="800"/>
+    </p>
+    <ul>
+     <li>
+      Setup a security group
+      <ul>
+       <li>
+        Select “Create a new security group”
+       </li>
+       <li>
+        Set the “Security group name” to “Jupyter”
+       </li>
+       <li>
+        Click “Add Rule”
+       </li>
+       <li>
+        Set a “Custom TCP Rule”
+       </li>
+       <li>
+        Set the “Port Range” to “8888”
+       </li>
+       <li>
+        Select “Anywhere” as the “Source”
+       </li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+  </ul>
+  <h2 id="step-4-launch">
+   Step 4. Launch
+  </h2>
+  <ul>
+   <li>
+    <p>
+     Click on the “Launch” button to launch your GPU instance.
+    </p>
+    <ul>
+     <li>
+      AWS will ask if you’d like to specify an authentication key pair. In this case the AMI has a pre-configured user account and password, so you can select “Proceed without a key pair” and click the “Launch Instances” button.
+     </li>
+    </ul>
+   </li>
+   <li>
+    <p>
+     Click the “View Instances” button to go to the EC2 Management Console and watch your instance boot.
+    </p>
+   </li>
+   <li>
+    <p>
+     From this point on, AWS will charge you for running this EC2 instance. You can find the details on the EC2 On-Demand Pricing page.
+    </p>
+   </li>
+   <li>
+    <p>
+     Most importantly, remember to “stop” (i.e. shutdown) your instances when you are not using them. Otherwise, your instances might run for a day, week, month, or longer without you remembering, and you’ll wind up with a large bill!
+    </p>
+   </li>
+   <li>
+    <p>
+     AWS charges primarily for running instances, so most of the charges will cease once you stop the instance. However, there are smaller storage charges that continue to accrue until you “terminate” (i.e. delete) the instance.
+    </p>
+   </li>
+  </ul>
+  <h2 id="step-5-login">
+   Step 5. Login
+  </h2>
+  <p>
+   Your instance may take a few minutes to initialize. Once you see “2/2 checks passed” on the EC2 Management Console, your instance is ready for you to log in.
+  </p>
+  <p>
+   Note the “IPv4 Public IP” address (in the format of “X.X.X.X”) on the EC2 Dashboard.
+  </p>
+  <ul>
+   <li>
+    Go to your terminal
+   </li>
+   <li>
+    Type ssh udacity@X.X.X.X
+    <ul>
+     <li>
+      X.X.X.X is the IPv4 Public IP found in AWS.
+     </li>
+    </ul>
+   </li>
+   <li>
+    Authenticate with the password “udacity”.
+   </li>
+   <li>
+    Change the password using the passwd command.
+    <ul>
+     <li>
+      This new password will be used for logging into your instance with the “udacity” account.
+     </li>
+    </ul>
+   </li>
+  </ul>
+  <p>
+   Now you’re logged into your instance. You can run any of the projects in this instance. To make sure everything works, you can test it by running a sample project.
+  </p>
+ </body>
+</html>
