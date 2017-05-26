@@ -36,52 +36,58 @@ yr <- format.Date(datesequence, '%Y')
 base_url <- 'https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/6/MOD09CMA/'
 base_url2 <- paste0(base_url, yr, '/', doyr, '/')
 
-## Setup the results file
-write.csv(data.frame(date=NA,
-                     AOT_at_500nm=NA,
-                     data_layer=NA,
-                     filename=NA,
-                     longitude=NA,
-                     latitude=NA),
-          file = paste0(dir, '/results/AOD_riceyield_airqual_project.csv'),
-          row.names = FALSE)
+result_file = paste0(dir, '/results/AOD_riceyield_airqual_project.csv')
 
-## for (i in 1:length(datesequence)) {
-# setwd("aerosol_rasters/temp/") 
-mclapply(base_url2, function(x){
-    get_output <- GET(x) #see ??? for guidelines on this because was not able to use the XML and RCurl packages to extract webpage links.  they only worked if I manually saved each webpage as a HTML file first
-    ## doc = htmlParse(getURL(base_url2[i]))
+## Setup the results file
+if(!file.exists(paste0(dir, '/results/AOD_riceyield_airqual_project.csv')))
+    write.csv(data.frame(date=NA,
+                         AOT_at_500nm=NA,
+                         filename=NA),
+              
+                                        #data_layer=NA,
+                                        #longitude=NA,
+                                        #latitude=NA),
+              file = result_file,
+              row.names = FALSE)
+
+
+foo = function(i){
+    x = base_url2[i]
+    get_output <- GET(x)
     urls <- readHTMLTable(rawToChar(get_output$content),
                           stringsAsFactors = FALSE)
     fname <- urls$`ftp-directory-list`[3,1]
-    file_url <- paste0(x, fname)
-    dest_file = paste0(dir, "/temp/", fname)
-    ## setwd(file.path(dir, 'temp')) # This is dangerous
-    download.file(file_url, destfile = dest_file,
-                  mode = 'wb') #this fixed a problem https://gis.stackexchange.com/questions/213923/open-hdf4-files-using-gdal-on-windows
-    fname_tif <- gsub('hdf', 'tif', dest_file, fixed=TRUE) 
-                          #gdalinfo(fname) #we got a good ole hdf4 file!  must set mode='wb' in download.file above for this to work or manually download files from the URL on my windows machine
-    sbs <- get_subdatasets(dest_file) #we need subdataset 12 "Coarse Resolution AOT at 550 nm"
-    gdal_translate(src_dataset = dest_file,
-                   dst_dataset = fname_tif,
-                   of = 'GTiff', sd_index = 12) #should print NULL on the screen
-    aod_tif <- raster(fname_tif)
-    aod_value <- extract(aod_tif, res_station)
-    file.remove(dest_file)
-    file.remove(fname_tif)
-    ## setwd(file.path(air_qualDir, 'results'))
-                          # This is going to kill you - very inefficient
-    ## if (i == 1) {
-    results <- data.frame(date=datesequence[i],
-                          AOT_at_500nm=aod_value,
-                          data_layer=sbs[12],
-                          filename=fname,
-                          longitude=coordinates(res_station)[1],
-                          latitude=coordinates(res_station)[2])
-    write.table(results, sep = ",",
-              file = paste0(dir, '/results/AOD_riceyield_airqual_project.csv'),
-            row.names = FALSE, append = TRUE, col.names = FALSE)
-}, mc.cores = 2L)
+ #   browser()
+    if(!any(grepl(fname, readLines(result_file)))){
+        file_url <- paste0(x, fname)
+        dest_file = paste0(dir, "/temp/", fname)
+        ## setwd(file.path(dir, 'temp')) # This is dangerous
+        download.file(file_url, destfile = dest_file,
+                      mode = 'wb') #this fixed a problem https://gis.stackexchange.com/questions/213923/open-hdf4-files-using-gdal-on-windows
+        fname_tif <- gsub('hdf', 'tif', dest_file, fixed=TRUE) 
+        ##gdalinfo(fname) #we got a good ole hdf4 file!  must set mode='wb' in download.file above for this to work or manually download files from the URL on my windows machine
+        sbs <- get_subdatasets(dest_file) #we need subdataset 12 "Coarse Resolution AOT at 550 nm"
+        gdal_translate(src_dataset = dest_file,
+                       dst_dataset = fname_tif,
+                       of = 'GTiff', sd_index = 12) #should print NULL on the screen
+        aod_tif <- raster(fname_tif)
+        aod_value <- extract(aod_tif, res_station)
+        file.remove(dest_file)
+        file.remove(fname_tif)
+        results <- data.frame(date=datesequence[i],
+                              AOT_at_500nm=aod_value,
+                              filename=fname)
+        
+                                        #data_layer=sbs[12],
+                                        #longitude=coordinates(res_station)[1],
+                                        #latitude=coordinates(res_station)[2])
+        write.table(results, sep = ",",
+                    file = result_file,
+                    row.names = FALSE, append = TRUE, col.names = FALSE)
+    }
+}
+
+mclapply(seq_along(base_url2), function(i) try(foo(i)), mc.cores = 8L)
 
 ##     next
 ##   }
