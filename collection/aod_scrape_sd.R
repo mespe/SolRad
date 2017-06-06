@@ -4,6 +4,7 @@ library(XML)
 library(raster)
 library(gdalUtils)
 library(httr)
+library(RCurl)
 #39.464743, -121.734355 are the coordinates of rice research station of interest
 ###user needs to define air_qualDir###
 # Assume that the script is being run in collection/
@@ -116,6 +117,6 @@ get_MODIS_subset= function(tar){
     }
 }
 
-mclapply(tars, function(x) try(foo(x)), mc.cores = 4L)
+mclapply(tars[1:10], function(x) try(get_MODIS_subset(x)), mc.cores = 1L)
 
 
