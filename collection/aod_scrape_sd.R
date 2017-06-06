@@ -46,8 +46,9 @@ result_file = paste0(dir, '/results/AOD_riceyield_airqual_project.csv')
 
 ## Setup the results file
 if(!file.exists(paste0(dir, '/results/AOD_riceyield_airqual_project.csv')))
-    write.csv(data.frame(date=NA,
-                         AOT_at_500nm=NA,
+    write.csv(data.frame(Aerosol_Type_Land = NA,
+                         Corrected_Optical_Depth_Land = NA,
+                         Corrected_Optical_Depth_Land_wav2p1 = NA,
                          filename=NA),
               # Don't include these, since they will be the same for all
               # saves disk space and I/O
@@ -60,17 +61,28 @@ if(!file.exists(paste0(dir, '/results/AOD_riceyield_airqual_project.csv')))
 # corrected optical depth land
 # aerosol type land
 # 
+curl = getCurlHandle(useragent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36", followlocation = TRUE, verbose = TRUE)
+
+get_target_links = function(base_urls, curl = getCurlHandle())
+{
+    links = lapply(base_urls, function(url){
+        doc = htmlParse(getURL(url, curl = curl))
+        tmp = getHTMLLinks(doc)
+        grep("\\.hdf$", tmp, value = TRUE)
+    })
+    do.call(c, links)
+}
+
+tars = get_target_links(base_url2[1:5])
+
 
 # Define the function here and then use inside an mclapply
-foo = function(i){
-    x = base_url2[i]
-    get_output <- GET(x)
-    urls <- readHTMLTable(rawToChar(get_output$content),
-                          stringsAsFactors = FALSE)
-    fname <- urls$`ftp-directory-list`[3,1]
+get_MODIS_subset= function(tar){
+
+    fname = gsub(".*(MOD04_L2[.]A.*$)", "\\1", tar)
     # Don't download if we already have the data in the results
     if(!any(grepl(fname, readLines(result_file)))){
-        file_url <- paste0(x, fname)
+        file_url <- paste0("https://ladsweb.modaps.eosdis.nasa.gov", tar)
         dest_file = paste0(dir, "/temp/", fname)
         ## setwd(file.path(dir, 'temp')) # This is dangerous
         download.file(file_url, destfile = dest_file,
@@ -81,32 +93,29 @@ foo = function(i){
         sbs_sub_idx = grep("Aerosol_Type_Land|Corrected_Optical_Depth_Land|Corrected_Optical_Depth_Land_wav2p1",
                            sbs)
         ans = do.call(c, mclapply(sbs_sub_idx, function(i){
+            fname_tmp = gsub(".tif", paste0(i,".tif"), fname_tif)
+            on.exit(file.remove(fname_tmp))
+            
             gdal_translate(src_dataset = dest_file,
-                       dst_dataset = fname_tif,
-                       of = 'GTiff', sd_index = i) #should print NULL on the screen
-            aod_tif <- raster(fname_tif)
+                           dst_dataset = fname_tmp,
+                           of = 'GTiff', sd_index = i) #should print NULL on the screen
+            aod_tif <- raster(fname_tmp)
+            on.exit(file.remove(fname_tmp))
             aod_value <- extract(aod_tif, res_station)
-            file.remove(fname_tif)
             structure(aod_value,
                       names = gsub("^.*\\.hdf:mod04:", "", sbs[i]))
         }, mc.cores = 3L))
         
         file.remove(dest_file)
         
-        results <- data.frame(date=datesequence[i],
-                              t(ans),
+        results <- data.frame(t(ans),
                               filename=fname)
-        
-        #data_layer=sbs[12],
-        #longitude=coordinates(res_station)[1],
-        #latitude=coordinates(res_station)[2])
-        # Write in append mode to the same file - results might be out of order
         write.table(results, sep = ",",
                     file = result_file,
                     row.names = FALSE, append = TRUE, col.names = FALSE)
     }
 }
 
-mclapply(seq_along(base_url2), function(i) try(foo(i)), mc.cores = 8L)
+mclapply(tars, function(x) try(foo(x)), mc.cores = 4L)
 
 
