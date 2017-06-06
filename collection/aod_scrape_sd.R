@@ -36,7 +36,9 @@ library(parallel)
 
 doyr <- format.Date(datesequence, '%j')
 yr <- format.Date(datesequence, '%Y')
-base_url <- 'https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/6/MOD09CMA/'
+# base_url <- 'https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/6/MOD09CMA/'
+# Look at this different data product
+base_url <- 'https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/6/MOD04_L2/'
 base_url2 <- paste0(base_url, yr, '/', doyr, '/')
 
 # Define once 
@@ -54,6 +56,10 @@ if(!file.exists(paste0(dir, '/results/AOD_riceyield_airqual_project.csv')))
               #latitude=NA),
               file = result_file,
               row.names = FALSE)
+# Data we are interested in from other data products:
+# corrected optical depth land
+# aerosol type land
+# 
 
 # Define the function here and then use inside an mclapply
 foo = function(i){
@@ -72,20 +78,28 @@ foo = function(i){
         fname_tif <- gsub('hdf', 'tif', dest_file, fixed=TRUE) 
         ##gdalinfo(fname) #we got a good ole hdf4 file!  must set mode='wb' in download.file above for this to work or manually download files from the URL on my windows machine
         sbs <- get_subdatasets(dest_file) #we need subdataset 12 "Coarse Resolution AOT at 550 nm"
-        gdal_translate(src_dataset = dest_file,
+        sbs_sub_idx = grep("Aerosol_Type_Land|Corrected_Optical_Depth_Land|Corrected_Optical_Depth_Land_wav2p1",
+                           sbs)
+        ans = do.call(c, mclapply(sbs_sub_idx, function(i){
+            gdal_translate(src_dataset = dest_file,
                        dst_dataset = fname_tif,
-                       of = 'GTiff', sd_index = 12) #should print NULL on the screen
-        aod_tif <- raster(fname_tif)
-        aod_value <- extract(aod_tif, res_station)
+                       of = 'GTiff', sd_index = i) #should print NULL on the screen
+            aod_tif <- raster(fname_tif)
+            aod_value <- extract(aod_tif, res_station)
+            file.remove(fname_tif)
+            structure(aod_value,
+                      names = gsub("^.*\\.hdf:mod04:", "", sbs[i]))
+        }, mc.cores = 3L))
+        
         file.remove(dest_file)
-        file.remove(fname_tif)
+        
         results <- data.frame(date=datesequence[i],
-                              AOT_at_500nm=aod_value,
+                              t(ans),
                               filename=fname)
         
-                                        #data_layer=sbs[12],
-                                        #longitude=coordinates(res_station)[1],
-                                        #latitude=coordinates(res_station)[2])
+        #data_layer=sbs[12],
+        #longitude=coordinates(res_station)[1],
+        #latitude=coordinates(res_station)[2])
         # Write in append mode to the same file - results might be out of order
         write.table(results, sep = ",",
                     file = result_file,
