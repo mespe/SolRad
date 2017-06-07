@@ -74,7 +74,7 @@ get_target_links = function(base_urls, curl = getCurlHandle())
     do.call(c, links)
 }
 
-tars = get_target_links(base_url2[1:5])
+tars = get_target_links(base_url2)
 
 
 # Define the function here and then use inside an mclapply
@@ -117,6 +117,6 @@ get_MODIS_subset= function(tar){
     }
 }
 
-mclapply(tars[1:10], function(x) try(get_MODIS_subset(x)), mc.cores = 1L)
+mclapply(tars, function(x) try(get_MODIS_subset(x)), mc.cores = 5L)
 
 
